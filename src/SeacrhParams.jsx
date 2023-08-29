@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import Pet from "./Pet";
 const ANiMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
+import useBreedList from "./useBreedList";
 const SearchParams = () => {
   const [location, setLocation] = useState("");
   const [animal, setAnimal] = useState("");
   const [breed, setBreed] = useState("");
   const [pets, setPets] = useState([]);
-  const breeds = [];
+  const [breeds] = useBreedList(animal);
   useEffect(() => {
     requestPets();
-  },[]);
+  }, []);
   async function requestPets() {
     const res = await fetch(
       `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
@@ -20,10 +21,12 @@ const SearchParams = () => {
 
   return (
     <div className="search-params">
-      <form onSubmit={e=>{
-        e.preventDefault();
-        requestPets();
-      }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          requestPets();
+        }}
+      >
         <label htmlFor="loaction">
           Location
           <input
